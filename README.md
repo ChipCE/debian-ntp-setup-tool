@@ -1,2 +1,2 @@
 # debian-ntp-setup-tool
-auto script to setup local ntp client-server
+Auto script to setup debian to sync to local ntp server using ntpd
