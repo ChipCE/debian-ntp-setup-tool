@@ -26,23 +26,21 @@ do
     read -p "NTP server IP address : " serverIpAddr
 done
 
-yes | cp -vrf ntp.conf.client ntp.conf.client.tmp
-sed -i 's/#@server/server/' ntp.conf.client.tmp
-sed -i 's,'"#@ip"','"$serverIpAddr"',' ntp.conf.client.tmp
+yes | cp -vrf client.ntp.conf tmp.ntp.conf
+sed -i 's/#@server/server/' tmp.ntp.conf
+sed -i 's,'"#@ip"','"$serverIpAddr"',' tmp.ntp.conf
 
 echo "Copy config file..."
-yes | cp -vrf ntp.conf.client.tmp /etc/ntp.conf
+yes | cp -vrf tmp.ntp.conf /etc/ntp.conf
 # stop ntpd (just in case)
+sudo systemctl enable ntp
 sudo systemctl stop ntp
 sleep 5
 echo "Force ntp update..."
-ntp -gq
+ntpd -gq
 sleep 10
 echo "Start ntp client daemon."
-sudo systemctl enable ntp
 sleep 5
 sudo systemctl start ntp
-sleep 5
-sudo systemctl status ntp
 echo "Done."
 exit 0
